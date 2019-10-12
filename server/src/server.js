@@ -1,17 +1,11 @@
-const fastify = require('fastify')({ logger: true });
+require('dotenv').config();
+const app = require('./app')();
 
-fastify.get('/', async (request, reply) => {
-  return { hello: 'world' };
-});
-
-const start = async () => {
-  try {
-    await fastify.listen(3000);
-    fastify.log.info(`server listening on ${fastify.server.address().port}`);
-  } catch (err) {
-    fastify.log.error(err);
+app.listen(5000, (err, address) => {
+  if (err) {
+    app.log.error(err);
     process.exit(1);
   }
-};
 
-start();
+  app.log.info(`server listening on ${address}`);
+});
