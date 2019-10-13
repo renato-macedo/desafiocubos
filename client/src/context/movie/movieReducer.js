@@ -1,17 +1,11 @@
-import {
-  SEARCH_MOVIES,
-  SET_LOADING,
-  CLEAR_MOVIES,
-  GET_MOVIE,
-  GET_REPOS,
-} from '../types';
+import { SEARCH_MOVIES, SET_LOADING, CLEAR_MOVIES, GET_MOVIE } from '../types';
 
 export default function(state, action) {
   switch (action.type) {
     case SEARCH_MOVIES:
       return {
         ...state,
-        users: action.payload,
+        movies: action.payload,
         loading: false,
       };
     case SET_LOADING:
@@ -22,19 +16,13 @@ export default function(state, action) {
     case CLEAR_MOVIES:
       return {
         ...state,
-        users: [],
+        movies: [],
         loading: false,
       };
     case GET_MOVIE:
       return {
         ...state,
-        user: action.payload,
-        loading: false,
-      };
-    case GET_REPOS:
-      return {
-        ...state,
-        repos: action.payload,
+        movie: action.payload,
         loading: false,
       };
     default:

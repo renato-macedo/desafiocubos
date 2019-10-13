@@ -9,21 +9,21 @@ const userStyle = {
   gridGap: '1rem',
 };
 
-function Users() {
+function Movies() {
   const movieContext = useContext(MovieContext);
 
-  const { loading, users } = movieContext;
+  const { loading, movies } = movieContext;
 
   if (loading) {
     return <Spinner />;
   }
   return (
     <div style={userStyle}>
-      {users.map(user => (
-        <MovieItem key={user.id} user={user} />
+      {movies.map(movie => (
+        <MovieItem key={movie.id} movie={movie} />
       ))}
     </div>
   );
 }
 
-export default Users;
+export default Movies;

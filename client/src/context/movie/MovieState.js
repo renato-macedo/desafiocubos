@@ -1,85 +1,61 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
-import GithubContext from './movieContext';
-import GithubReducer from './movieReducer';
-import {
-  SEARCH_MOVIES,
-  SET_LOADING,
-  CLEAR_MOVIES,
-  GET_MOVIE,
-  GET_REPOS,
-} from '../types';
+import MovieContext from './movieContext';
+import MovieReducer from './movieReducer';
+import api from '../../services/api';
+import { SEARCH_MOVIES, SET_LOADING, CLEAR_MOVIES, GET_MOVIE } from '../types';
 
-let githubClientId;
-let githubClientSecret;
-
-if (process.env.NODE_ENV !== 'production') {
-  githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
-} else {
-  githubClientId = process.env.GIHUB_CLIENT_ID;
-  githubClientSecret = process.env.GITHUB_CLIENT_CLIENT_SECRET;
-}
-
-function GithubState(props) {
+function MovieState(props) {
   const initialState = {
-    users: [],
-    user: {},
-    repos: [],
+    movies: [],
+    movie: {},
     loading: false,
   };
 
-  const [state, dispatch] = useReducer(GithubReducer, initialState);
+  const [state, dispatch] = useReducer(MovieReducer, initialState);
 
-  // Search Users
-  async function searchUsers(text) {
+  // Search Movies
+  async function searchMovies(text) {
     setLoading();
 
     console.log('Pesquisando: ', text);
-    const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${githubClientId}$client_secret=${githubClientSecret}`
-    );
+    try {
+      const res = await api.get(`/search?q=${text}`);
 
-    console.log(res.data);
-    dispatch({
-      type: SEARCH_MOVIES,
-      payload: res.data.items,
-    });
+      console.log(res.data);
+      dispatch({
+        type: SEARCH_MOVIES,
+        payload: res.data.results,
+      });
+    } catch (error) {
+      dispatch({
+        type: SEARCH_MOVIES,
+        payload: [],
+      });
+    }
   }
 
-  // Get User
-  async function getUser(username) {
+  // Get Movie
+  async function getMovie(id) {
     setLoading();
-    // console.log('Pesquisando: ', username);
-    const res = await axios.get(
-      `https://api.github.com/users/${username}?client_id=${githubClientId}$client_secret=${githubClientSecret}`
-    );
+    try {
+      const res = await api.get(`movies/${id}`);
 
-    dispatch({
-      type: GET_MOVIE,
-      payload: res.data,
-    });
+      dispatch({
+        type: GET_MOVIE,
+        payload: res.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_MOVIE,
+        payload: {},
+      });
+    }
 
     // setAlert(null);
   }
 
-  // Get Repos
-
-  async function getRepos(username) {
-    setLoading();
-    // console.log('Pesquisando: ', username);
-    const res = await axios.get(
-      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${githubClientId}$client_secret=${githubClientSecret}`
-    );
-
-    dispatch({
-      type: GET_REPOS,
-      payload: res.data,
-    });
-  }
-
-  // Clear Users
-  function clearUsers() {
+  // Clear Movies
+  function clearMovies() {
     dispatch({
       type: CLEAR_MOVIES,
     });
@@ -91,21 +67,19 @@ function GithubState(props) {
   }
 
   return (
-    <GithubContext.Provider
+    <MovieContext.Provider
       value={{
-        users: state.users,
-        user: state.user,
-        repos: state.repos,
+        movies: state.movies,
+        movie: state.movie,
         loading: state.loading,
-        searchUsers,
-        clearUsers,
-        getUser,
-        getRepos,
+        searchMovies,
+        clearMovies,
+        getMovie,
       }}
     >
       {props.children}
-    </GithubContext.Provider>
+    </MovieContext.Provider>
   );
 }
 
-export default GithubState;
+export default MovieState;

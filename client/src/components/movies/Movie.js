@@ -1,24 +1,35 @@
 /* eslint-disable camelcase */
 import React, { Fragment, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Repos from '../repos/Repos';
-
+import notfound from '../../assets/notfound.jpg';
 import Spinner from '../layout/Spinner';
-import GithubContext from '../../context/movie/movieContext';
-const User = ({ match }) => {
-  const githubUser = useContext(GithubContext);
+import MovieContext from '../../context/movie/movieContext';
+const Movie = ({ match }) => {
+  const movieDetails = useContext(MovieContext);
 
-  const { user, getUser, loading, repos, getRepos } = githubUser;
+  const { movie, getMovie, loading } = movieDetails;
 
   useEffect(() => {
-    getUser(match.params.login);
-    getRepos(match.params.login);
+    getMovie(match.params.id);
+
     // eslint-disable-next-line
   }, []);
 
-  const {
-    name,
-    avatar_url,
+  const user = {
+    name: '',
+    avatar_url: 1,
+    location: '',
+    bio: true,
+    blog: '',
+    login: '',
+    html_url: '',
+    followers: '',
+    following: '',
+    public_repos: '',
+    public_gists: '',
+    company: '',
+  };
+  let {
     location,
     bio,
     blog,
@@ -28,10 +39,11 @@ const User = ({ match }) => {
     following,
     public_repos,
     public_gists,
-    hireable,
     company,
   } = user;
 
+  const { title, poster_path, release_date, overview } = movie;
+  console.log(release_date);
   if (loading) return <Spinner />;
 
   return (
@@ -39,32 +51,25 @@ const User = ({ match }) => {
       <Link to="/" className="btn btn-light">
         Back to search
       </Link>
-      Hireable:{' '}
-      {hireable ? (
-        <i className="fas fa-check text-success" />
-      ) : (
-        <i className="fas fa-times-circle text-danger" />
-      )}
       <div className="card grid-2">
         <div className="all-center">
           <img
-            src={avatar_url}
+            src={
+              poster_path
+                ? `https://image.tmdb.org/t/p/w600_and_h900_bestv2${poster_path}`
+                : notfound
+            }
             alt=""
-            className="round-img"
             style={{ width: '150px' }}
           />
-          <h1>{name}</h1>
-          <p>
-            Location:
-            {` ${location}` // eu não sei usar eslint
-            }
-          </p>
+          <h1>{title}</h1>
+          {release_date && <p> {release_date.split('-')[0]}</p>}
         </div>
         <div>
-          {bio && (
+          {overview && (
             <Fragment>
-              <h3>Bio</h3>
-              <p>{bio}</p>
+              <h3>Overview</h3>
+              <p>{overview}</p>
             </Fragment>
           )}
           <a
@@ -73,7 +78,7 @@ const User = ({ match }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Visualizar no IMDb
+            View on IMDb
           </a>
           <ul>
             <li>
@@ -121,9 +126,8 @@ const User = ({ match }) => {
           {public_gists}
         </div>
       </div>
-      <Repos repos={repos} />
     </Fragment>
   );
 };
 
-export default User;
+export default Movie;

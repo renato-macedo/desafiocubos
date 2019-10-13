@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import Search from '../movies/Search';
-import Users from '../movies/Users';
+import Movies from '../movies/Movies';
 
 function Home() {
   return (
     <Fragment>
       <Search />
-      <Users />
+      <Movies />
     </Fragment>
   );
 }

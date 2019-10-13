@@ -7,7 +7,7 @@ const Search = () => {
   const movieContext = useContext(MovieContext);
   const alertContext = useContext(AlertContext);
 
-  const { users, searchUsers, clearUsers } = movieContext;
+  const { movies, searchMovies, clearMovies } = movieContext;
   const { setAlert } = alertContext;
 
   const [text, setText] = useState('');
@@ -18,7 +18,7 @@ const Search = () => {
     e.preventDefault();
 
     if (text) {
-      searchUsers(text);
+      searchMovies(text);
       setText('');
     } else {
       setAlert('Please enter something', 'light');
@@ -31,7 +31,7 @@ const Search = () => {
         <input
           type="text"
           name="text"
-          placeholder="Search Users..."
+          placeholder="Procure por um filme..."
           value={text}
           onChange={onChange}
         />
@@ -43,11 +43,11 @@ const Search = () => {
           Search
         </button>
       </form>
-      {users.length > 0 && (
+      {movies.length > 0 && (
         <button
           type="submit"
           className="btn btn-link btn-block"
-          onClick={clearUsers}
+          onClick={clearMovies}
         >
           Clear
         </button>
