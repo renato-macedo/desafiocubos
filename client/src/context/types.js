@@ -4,3 +4,4 @@ export const CLEAR_MOVIES = 'CLEAR_MOVIES';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const MOVIE_NOT_FOUND = 'MOVIE_NOT_FOUND';

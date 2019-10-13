@@ -3,11 +3,11 @@ import MovieItem from './MovieItem';
 import Spinner from '../layout/Spinner';
 import MovieContext from '../../context/movie/movieContext';
 
-const userStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  gridGap: '1rem',
-};
+// const userStyle = {
+//   display: 'grid',
+//   gridTemplateColumns: 'repeat(3, 1fr)',
+//   gridGap: '1rem',
+// };
 
 function Movies() {
   const movieContext = useContext(MovieContext);
@@ -18,7 +18,7 @@ function Movies() {
     return <Spinner />;
   }
   return (
-    <div style={userStyle}>
+    <div className="movies-container">
       {movies.map(movie => (
         <MovieItem key={movie.id} movie={movie} />
       ))}

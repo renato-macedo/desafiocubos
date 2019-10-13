@@ -2,7 +2,13 @@ import React, { useReducer } from 'react';
 import MovieContext from './movieContext';
 import MovieReducer from './movieReducer';
 import api from '../../services/api';
-import { SEARCH_MOVIES, SET_LOADING, CLEAR_MOVIES, GET_MOVIE } from '../types';
+import {
+  SEARCH_MOVIES,
+  SET_LOADING,
+  CLEAR_MOVIES,
+  GET_MOVIE,
+  MOVIE_NOT_FOUND,
+} from '../types';
 
 function MovieState(props) {
   const initialState = {
@@ -39,15 +45,15 @@ function MovieState(props) {
     setLoading();
     try {
       const res = await api.get(`movies/${id}`);
-
+      console.log(res.data);
       dispatch({
         type: GET_MOVIE,
         payload: res.data,
       });
     } catch (error) {
       dispatch({
-        type: GET_MOVIE,
-        payload: {},
+        type: MOVIE_NOT_FOUND,
+        payload: { vote_average: '-', imdb_id: '' },
       });
     }
 

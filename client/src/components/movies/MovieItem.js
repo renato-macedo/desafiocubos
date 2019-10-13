@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import notfound from '../../assets/notfound.jpg';
 const Movie = ({ movie: { poster_path, title, id } }) => {
   return (
-    <div className="card text-center">
+    <div className="movie-item">
       <img
         src={
           poster_path

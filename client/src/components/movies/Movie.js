@@ -10,39 +10,23 @@ const Movie = ({ match }) => {
   const { movie, getMovie, loading } = movieDetails;
 
   useEffect(() => {
-    getMovie(match.params.id);
+    async function fetchData() {
+      await getMovie(match.params.id);
+    }
+    fetchData();
 
     // eslint-disable-next-line
   }, []);
 
-  const user = {
-    name: '',
-    avatar_url: 1,
-    location: '',
-    bio: true,
-    blog: '',
-    login: '',
-    html_url: '',
-    followers: '',
-    following: '',
-    public_repos: '',
-    public_gists: '',
-    company: '',
-  };
-  let {
-    location,
-    bio,
-    blog,
-    login,
-    html_url,
-    followers,
-    following,
-    public_repos,
-    public_gists,
-    company,
-  } = user;
-
-  const { title, poster_path, release_date, overview } = movie;
+  const {
+    title,
+    poster_path,
+    release_date,
+    overview,
+    vote_average,
+    genres,
+    imdb_id,
+  } = movie;
   console.log(release_date);
   if (loading) return <Spinner />;
 
@@ -73,7 +57,7 @@ const Movie = ({ match }) => {
             </Fragment>
           )}
           <a
-            href={'https://www.imdb.com/title/tt7286456/'}
+            href={`https://www.imdb.com/title/${imdb_id ? imdb_id : ''}`}
             className="btn btn-dark my-1"
             target="_blank"
             rel="noopener noreferrer"
@@ -82,48 +66,20 @@ const Movie = ({ match }) => {
           </a>
           <ul>
             <li>
-              {login && (
+              {genres && genres.length > 0 && (
                 <Fragment>
-                  <strong>Username: </strong>
-                  {login}
+                  <strong>Genres: </strong>
+                  {genres.join(', ')}
                 </Fragment>
               )}
             </li>
             <li>
-              {company && (
-                <Fragment>
-                  <strong>Company: </strong>
-                  {company}
-                </Fragment>
-              )}
-            </li>
-            <li>
-              {blog && (
-                <Fragment>
-                  <strong>Website: </strong>
-                  {blog}
-                </Fragment>
-              )}
+              <Fragment>
+                <strong>Vote Average: </strong>
+                <span className="badge badge-success">{vote_average}</span>
+              </Fragment>
             </li>
           </ul>
-        </div>
-      </div>
-      <div className="card text-center">
-        <div className="badge badge-primary">
-          <span>Followers: </span>
-          {followers}
-        </div>
-        <div className="badge badge-success">
-          <span>Following: </span>
-          {following}
-        </div>
-        <div className="badge badge-light">
-          <span>Public Repos: </span>
-          {public_repos}
-        </div>
-        <div className="badge badge-dark">
-          <span>Public Gists: </span>
-          {public_gists}
         </div>
       </div>
     </Fragment>
