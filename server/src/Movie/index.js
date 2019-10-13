@@ -25,28 +25,33 @@ const Movie = {
 
     try {
       const response = await axios.get(
-        `${BASE_URL}/movie/${movieId}/external_ids?api_key=${API_KEY}`
-      );
-      const { imdb_id } = response.data;
-
-      const movieDetails = await axios.get(
-        `${BASE_URL}/find/${imdb_id}?api_key=${API_KEY}&external_source=imdb_id`
+        `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`
       );
       const {
+        id,
+        imdb_id,
         title,
         release_date,
         poster_path,
+        backdrop_path,
         overview,
-      } = movieDetails.data.movie_results[0];
+        vote_average,
+        genres,
+      } = response.data;
 
       return reply
         .status(200)
         .header('Content-Type', 'application/json; charset=utf-8')
         .send({
+          id,
+          imdb_id,
           title,
           release_date,
           poster_path,
+          backdrop_path,
           overview,
+          vote_average,
+          genres: genres.map(genre => genre.name),
         });
     } catch (error) {
       return reply.status(500).send({ message: 'server error' });
